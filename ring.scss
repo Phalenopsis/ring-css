@@ -1,0 +1,98 @@
+@mixin ring($color, $size){
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    border: $size/10 solid $color;
+    box-shadow: 6px 9px 5px -1px $colorDarker, inset 6px 9px 5px -1px $colorDarker;
+    background-color: transparent;
+}
+@mixin ringForQuest($color, $size){
+    width: $size;
+    height: $size;
+    border-radius: 50%;
+    border: $size/10 solid $color;
+    box-shadow: 6px 3px 5px -1px $colorDarkerForQuest, inset 6px 3px 5px -1px $colorDarkerForQuest;
+    background-color: transparent;
+}
+@keyframes slidein {
+  0% { transform: scaleX(0) rotate(0); }
+  25% { transform: scaleX(0.5) rotate(-90deg); }
+  50%   { transform: scaleX(1) rotate(-180deg); }
+  75%   { transform: scaleX(0.5) rotate(-2700deg); }
+  100% { transform: scaleX(0) rotate(-360deg); }
+}
+
+@mixin animate($time){
+    animation: #{$time}s linear 1s infinite slidein;
+}
+
+$color : gold;
+$amount : 10%;
+$amountForQuest : 15%;
+$colorDarker : darken($color, $amount);
+$colorDarkerForQuest : darken($color, $amountForQuest);
+$size : 50px;
+$nb_rings : 22;
+$nb_rings_for_quest: 6;
+body{
+    background-color: black;
+    margin: 5rem 20%;
+}
+div{
+    display: flex;
+    justify-content: center;
+    height: 250px;
+    width: 100%;
+}
+div:nth-of-type(2){
+    display: flex;
+    justify-content: left;
+}
+ul{
+    display: flex;
+    list-style: none;
+    position: relative;
+}
+p{
+    color:$color;
+    font-size: 3rem;
+}
+p.right{
+        text-align: right;
+}
+
+@for $i from 1 through $nb_rings_for_quest {
+    $size_loop : $size *3 *($i+1) /7;
+  div.ring:nth-of-type(1) ul :nth-child(n + #{$i}) {
+    @include ringForQuest($color, $size_loop);
+    //transform: translate(-200px);
+    position: absolute;
+    z-index: $i;
+    left: $size_loop *$i/3;
+    top: (200px - $size_loop)/2;
+  }
+}
+
+@for $i from 1 through $nb_rings {
+    $size_loop : $size * $i /3;
+  div.ring:nth-of-type(2) ul :nth-child(n + #{$i}) {
+    @include ring($color, $size_loop);
+    position: absolute;
+    z-index: $i;
+    left: (-$size_loop * (0.7));
+    top: (200px - $size_loop)/2;
+    @include animate(3);
+  }
+}
+
+@for $i from 1 through $nb_rings {
+    $size_loop : $size * $i /3;
+  div.ring:nth-of-type(3) ul :nth-child(n + #{$i}) {
+    @include ring($color, $size_loop);
+    position: absolute;
+    z-index: $i;
+    left: $size_loop * (0.7);
+    top: (200px - $size_loop)/2;
+    @include animate(5);
+  }
+}
